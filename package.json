@@ -1,0 +1,41 @@
+{
+  "name": "gulp-rewrite-cssurl",
+  "version": "0.0.1",
+  "description": "rewrite css url gulp plugin",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/guilipan/gulp-rewrite-cssurl"
+  },
+  "author": {
+    "name": "guilipan",
+    "email": "guilipan@163.com",
+    "url": "http://shaynegui.com"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "scripts": {
+    "test": "mocha test/*.js"
+  },
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "gulpplugin",
+    "css",
+    "url",
+    "cssurl",
+    "rewrite"
+  ],
+  "dependencies": {
+    "cssurl": "^1.0.2",
+    "gulp-util": "^3.0.1",
+    "through2": "^0.6.3"
+  },
+  "devDependencies": {
+    "chai": "^1.9.2",
+    "mocha": "^2.0.1"
+  }
+}
