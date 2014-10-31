@@ -1,0 +1,8 @@
+.column{background:url(bg.png) repeat-y #fff;}
+
+li{
+    line-height:18px;
+    margin-top: 3px;
+    background: url(http://localhost/b.png) no-repeat 0 10px;
+    padding-left: 10px;
+}
