@@ -20,6 +20,13 @@ module.exports = function (options) {
             return cb();
         }
 
+        if(file.isNull()){
+
+            thie.emit("error", new PluginError(pluginName, "file contents can not be null"));
+
+            return cb();
+        }
+
         if (file.isStream()) {
 
             this.emit("error", new PluginError(pluginName, "streaming not supported"));
