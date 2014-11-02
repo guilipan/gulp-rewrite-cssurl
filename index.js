@@ -4,6 +4,7 @@ var through = require("through2");
 var CSSURLRewriter = require("cssurl").URLRewriter;
 var pluginName = "gulp-rewrite-cssurl";
 var urlUtils = require("url");
+var path = require("path");
 
 module.exports = function (options) {
 
@@ -20,7 +21,7 @@ module.exports = function (options) {
             return cb();
         }
 
-        if(file.isNull()){
+        if (file.isNull()) {
 
             thie.emit("error", new PluginError(pluginName, "file contents can not be null"));
 
@@ -37,8 +38,11 @@ module.exports = function (options) {
         if (file.isBuffer()) {
 
             var rewriter = new CSSURLRewriter(function (url) {
-                // automatically append a query string with a unique value to bust caches
-                return urlUtils.resolve(options.prefix, url);
+
+                //给文件名前加上path路径分隔符,防止resolve的时候少掉中间路径
+                var filename = path.basename(url);
+                return urlUtils.resolve(options.prefix + "/", filename);
+
             });
 
             var result = rewriter.rewrite(file.contents.toString());
