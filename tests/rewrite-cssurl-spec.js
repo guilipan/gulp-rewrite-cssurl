@@ -8,28 +8,45 @@ var rewriteCSSURL = require("../index");
 
 describe("gulp-rewrite-cssurl,用户给css中的url重写前缀", function () {
 
-    it("提供基础路径,重写css的url", function (done) {
+    it("css中文件路径为文件名情况下,提供基础路径,重写css的url", function (done) {
 
         var fakeFile = new File({
             path: "/test/hello.css",
             contents: new Buffer("body{background-image:url(a.jpg)}")
         })
 
-        var stream = rewriteCSSURL({prefix: "http://pay.qq.com/images/"});
+        var stream = rewriteCSSURL({prefix: "//a.com/images"});
 
         stream.write(fakeFile);
 
         stream.once("data", function (file) {
 
             var contents = file.contents.toString();
-            expect(contents).to.contain("http://pay.qq.com/images/a.jpg");
+            expect(contents).to.contain("//a.com/images/a.jpg");
             done();
 
         })
     })
 
-    it("如果css的url中已经是个绝对地址,提取最后的文件名并合并前缀",function(done){
-        //todo sdfsdf
+    it("当css中路径为一个相对路径,获取css中的文件名部分,用前缀prefix拼接文件名得到常用的CDN路径",function(done){
+
+        var fakeFile = new File({
+            path: "/test/hello.css",
+            contents: new Buffer("body{background-image:url(../../a.jpg)}")
+        })
+
+        var stream = rewriteCSSURL({prefix: "//a.com/images"});
+
+        stream.write(fakeFile);
+
+        stream.once("data", function (file) {
+
+            var contents = file.contents.toString();
+            expect(contents).to.contain("//a.com/images/a.jpg");
+            done();
+
+        })
+
     })
 
     it("传入的文件是stream,抛出异常", function (done) {
