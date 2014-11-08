@@ -71,5 +71,53 @@ describe("gulp-rewrite-cssurl,用户给css中的url重写前缀", function () {
         stream.write(fakeFile);
     })
 
+    it("传params,新的url带上querystring",function(done){
+
+        var fakeFile = new File({
+            path: "/test/hello.css",
+            contents: new Buffer("body{background-image:url(../../a.jpg)}")
+        })
+
+        var stream = rewriteCSSURL({
+            prefix: "//a.com/images/",
+            params:{
+                foo:1,
+                bar:2
+            }
+        });
+
+        stream.write(fakeFile);
+
+        stream.once("data", function (file) {
+
+            var contents = file.contents.toString();
+            expect(contents).to.contain("//a.com/images//a.jpg?foo=1&bar=2");
+            done();
+
+        })
+    })
+
+    it("不传params,新的url没有querystring",function(done){
+
+        var fakeFile = new File({
+            path: "/test/hello.css",
+            contents: new Buffer("body{background-image:url(../../a.jpg)}")
+        })
+
+        var stream = rewriteCSSURL({
+            prefix: "//a.com/images"
+        });
+
+        stream.write(fakeFile);
+
+        stream.once("data", function (file) {
+
+            var contents = file.contents.toString();
+            expect(contents).to.equal("body{background-image:url(//a.com/images/a.jpg)}");
+            done();
+
+        })
+    })
+
 
 })
