@@ -5,12 +5,14 @@ var CSSURLRewriter = require("cssurl").URLRewriter;
 var pluginName = "gulp-rewrite-cssurl";
 var urlUtils = require("url");
 var path = require("path");
+var querystring = require("querystring");
 
 module.exports = function (options) {
 
     options = options || {
-        prefix: "/"
+        prefix: ""
     };
+
 
     var stream = through.obj(function (file, enc, cb) {
 
@@ -39,9 +41,15 @@ module.exports = function (options) {
 
             var rewriter = new CSSURLRewriter(function (url) {
 
-                //给文件名前加上path路径分隔符,防止resolve的时候少掉中间路径
+
                 var filename = path.basename(url);
-                return urlUtils.resolve(options.prefix + "/", filename);
+                var urlParams = "";
+                if (options.params) {
+                    urlParams = "?" + querystring.stringify(options.params);
+                }
+
+                //给文件名前加上path路径分隔符,防止resolve的时候少掉中间路径
+                return (options.prefix + (options.prefix && "/") + filename + urlParams);
 
             });
 
